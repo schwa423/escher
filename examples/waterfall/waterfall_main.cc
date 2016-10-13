@@ -11,6 +11,7 @@
 #include "escher/geometry/types.h"
 #include "escher/scene/model.h"
 #include "escher/scene/stage.h"
+#include "escher/util/stopwatch.h"
 #include "ftl/logging.h"
 
 static void key_callback(GLFWwindow* window,
@@ -44,15 +45,31 @@ int main(int argc, char** argv) {
     escher::Stage stage;
     // AppTestScene scene;
 
+    escher::Stopwatch stopwatch;
+    uint64_t frame_count = 0;
+    uint64_t first_frame_microseconds;
+
     while (!glfwWindowShouldClose(demo->GetWindow())) {
       // escher::Model model = scene.GetModel(stage.viewing_volume(), focus);
       escher::Model model;  // dummy model
       model.set_blur_plane_height(12.0f);
       escher.Render(stage, model);
+      ++frame_count;
+      if (frame_count == 1) {
+        first_frame_microseconds = stopwatch.GetElapsedMicroseconds();
+        stopwatch.Reset();
+      }
 
       glfwPollEvents();
     }
+
     vulkan_context.device.waitIdle();
+
+    auto microseconds = stopwatch.GetElapsedMicroseconds();
+    double fps = (frame_count - 1) * 1000000.0 / microseconds;
+    FTL_LOG(INFO) << "Average frame rate: " << fps;
+    FTL_LOG(INFO) << "First frame took: " << first_frame_microseconds / 1000.0
+                  << " milliseconds";
   }
   escher::GlslangFinalizeProcess();
 

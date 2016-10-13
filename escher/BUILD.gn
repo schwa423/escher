@@ -51,6 +51,10 @@ static_library("escher") {
     "impl/vulkan_utils.cc",
     "impl/vulkan_utils.h",
     "material/material.h",
+    "op/interpreter.cc",
+    "op/interpreter.h",
+    "paper/paper_renderer.cc",
+    "paper/paper_renderer.h",
     "scene/ambient_light.cc",
     "scene/ambient_light.h",
     "scene/binding.h",
@@ -73,6 +77,7 @@ static_library("escher") {
     "shape/mesh_builder.cc",
     "shape/mesh_builder.h",
     "util/need.h",
+    "util/stopwatch.h",
     "vk/vulkan_context.h",
     "vk/vulkan_swapchain.h",
   ]

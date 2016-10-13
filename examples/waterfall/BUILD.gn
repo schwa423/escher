@@ -13,6 +13,10 @@ if (is_linux) {
       #"scenes/shadow_test_scene.cc",
       "vulkan_proc_addrs.cc",
       "waterfall_main.cc",
+      "paper_interpreter/paper_interpreter.cc",
+      "paper_interpreter/paper_interpreter.h",
+      "paper_interpreter/paper.capnp.c++",
+      "paper_interpreter/paper.capnp.h",
     ]
     deps = [
       "//lib/escher/escher",
