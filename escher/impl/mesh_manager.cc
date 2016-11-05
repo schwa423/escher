@@ -192,6 +192,7 @@ MeshPtr MeshManager::MeshBuilder::Build() {
   return mesh;
 }
 
+// Must be kept in sync with ModelShaderGenerator::GenerateVertexSource().
 const MeshSpecImpl& MeshManager::GetMeshSpecImpl(MeshSpec spec) {
   auto ptr = spec_cache_[spec].get();
   if (ptr) {
