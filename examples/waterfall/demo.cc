@@ -414,9 +414,26 @@ VkBool32 Demo::HandleDebugReport(VkDebugReportFlagsEXT flags,
                                  int32_t messageCode,
                                  const char* pLayerPrefix,
                                  const char* pMessage) {
+  if (flags & VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT &&
+      objectType == VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_EXT) {
+    // At the time of writing this comment, these performance warnings are
+    // erroneous.  We are rendering a completely different pass.
+    // TODO: It is possible for later code changes to trigger this same warning
+    // for legitimate reasons.  Rather than unconditionally disabling it here,
+    // it would be better to provide a hook for Escher to disable reporting of
+    // known false-positives.
+    return false;
+  }
+
   std::cerr << "Vulkan Error: " << pMessage << " (from layer: " << pLayerPrefix
             << ")" << std::endl;
-  return true;
+
+  if (flags & VK_DEBUG_REPORT_ERROR_BIT_EXT) {
+    // Always crash immediately on errors.
+    FTL_CHECK(false);
+  }
+
+  return false;
 }
 
 escher::VulkanContext Demo::GetVulkanContext() {
